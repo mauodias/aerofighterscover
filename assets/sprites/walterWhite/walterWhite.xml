@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:4d43effedb8479806701a8ef94fd1355:0cc9188f08b05db09a1bb1917ac54432:942504a444917b761e925f0a7c364f72$ -->
+<!-- $TexturePacker:SmartUpdate:e978ad8b3dcf17e3360184c8fe1a45cd:38220f9463ec4342f96684e0e00fa138:942504a444917b761e925f0a7c364f72$ -->
 <!--Format:
 n  => name of the sprite
 x  => sprite x pos in texture
@@ -15,21 +15,21 @@ oW => sprite's original width (only available if trimmed)
 oH => sprite's original height (only available if trimmed)
 r => 'y' only set if sprite is rotated
 -->
-<TextureAtlas imagePath="walterWhite.png" width="128" height="256">
-    <sprite n="sprite_01.png" x="2" y="172" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_02.png" x="70" y="138" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_03.png" x="36" y="138" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_04.png" x="2" y="138" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_05.png" x="70" y="104" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_06.png" x="36" y="104" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_07.png" x="2" y="104" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_08.png" x="70" y="70" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_09.png" x="36" y="70" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_10.png" x="2" y="70" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_11.png" x="70" y="36" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_12.png" x="36" y="36" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_13.png" x="2" y="36" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_14.png" x="70" y="2" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_15.png" x="36" y="2" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="sprite_16.png" x="2" y="2" w="32" h="32" pX="0.5" pY="0.5"/>
+<TextureAtlas imagePath="walterWhite.png" width="128" height="128">
+    <sprite n="sprite_01.png" x="96" y="96" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_02.png" x="64" y="96" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_03.png" x="32" y="96" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_04.png" x="0" y="96" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_05.png" x="96" y="64" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_06.png" x="64" y="64" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_07.png" x="32" y="64" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_08.png" x="0" y="64" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_09.png" x="96" y="32" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_10.png" x="64" y="32" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_11.png" x="32" y="32" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_12.png" x="0" y="32" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_13.png" x="96" y="0" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_14.png" x="64" y="0" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_15.png" x="32" y="0" w="32" h="32" pX="0.5" pY="0.5"/>
+    <sprite n="sprite_16.png" x="0" y="0" w="32" h="32" pX="0.5" pY="0.5"/>
 </TextureAtlas>
