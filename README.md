@@ -4,7 +4,7 @@ Primeiro tema: Breaking Bad
 # Compilando os fontes
 Easy as 123! Na raiz do projeto, basta executar:
 
-```
+```sh
 make
 ```
 
@@ -13,8 +13,8 @@ E blam!
 # Rodando o jogo
 Após o projeto ter sido compilado, executar os seguintes comandos:
 
-```
-cd bin;
+```sh
+cd bin
 ./PlayState.sh
 ```
 
