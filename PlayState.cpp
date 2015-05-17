@@ -19,15 +19,15 @@ using namespace std;
 
 void PlayState::init()
 {
-    //if (!font.loadFromFile("data/fonts/arial.ttf")) {
-    //    cout << "Cannot load arial.ttf font!" << endl;
-    //    exit(1);
-    //}
-    //text.setFont(font);
-    //text.setString(L"Testing text output in SFML");
-    //text.setCharacterSize(24); // in pixels
-    //text.setColor(sf::Color::Yellow);
-    //text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+    if (!font.loadFromFile("data/fonts/arial.ttf")) {
+        cout << "Cannot load arial.ttf font!" << endl;
+        exit(1);
+    }
+    text.setFont(font);
+    text.setString(L"Testing text output in SFML");
+    text.setCharacterSize(24); // in pixels
+    text.setColor(sf::Color::Yellow);
+    text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
     map = new tmx::MapLoader("data/maps");       // all maps/tiles will be read from data/maps
     // map->AddSearchPath("data/maps/tilesets"); // e.g.: adding more search paths for tilesets
@@ -45,9 +45,11 @@ void PlayState::init()
     player.setAnimRate(10);
     player.setScale(1.5,1.5);
     player.play();
+
     visibleArea.load("data/img/visibility.png");
     visibleArea.setOrigin(800,600);
     visibleArea.setPosition(64,124);
+    
     arrow.load("data/img/arrow.png");
     arrow.setOrigin(64,64);
     arrow.setPosition(player.getPosition().x+24, player.getPosition().y+24);
@@ -56,6 +58,12 @@ void PlayState::init()
     objective.load("data/img/Char09.png");
     objective.setPosition(150,200);
 
+    minimap.load("data/img/minimap_dungeon-tilesets2.png");
+    minimap.setPosition(800-192, 0);
+
+    pointMap.load("data/img/point-map.png");
+    pointMap.setOrigin(194-800, 4);
+    pointMap.setPosition((player.getPosition().x)/2048/192, (player.getPosition().y)/1024/96);
 
     dirx = 0; // sprite dir: right (1), left (-1)
     diry = 0; // down (1), up (-1)
@@ -159,7 +167,8 @@ void PlayState::handleEvents(cgf::Game* game)
     sf::Vector2f playerPos = player.getPosition();
     visibleArea.setPosition(playerPos.x+24, playerPos.y+24);
     arrow.setPosition(playerPos.x+24, playerPos.y+24);
-    arrow.setRotation(getArrowRotation(player.getPosition().x, player.getPosition().y, 158, 208));
+    arrow.setRotation(getArrowRotation(playerPos.x, playerPos.y, 158, 208));
+    pointMap.setPosition(playerPos.x/(2048/192), playerPos.y/(1024/96));
 
 }
 
@@ -180,7 +189,13 @@ void PlayState::draw(cgf::Game* game)
     screen->draw(arrow);
     screen->draw(objective);
     screen->draw(visibleArea);
-    //screen->draw(text);
+    sf::View originalView = screen->getDefaultView();
+    sf::View currentView = screen->getView();
+    screen->setView(originalView);
+    screen->draw(minimap);
+    screen->draw(pointMap); 
+    screen->draw(text);
+    screen->setView(currentView);
 }
 
 void PlayState::centerMapOnPlayer()

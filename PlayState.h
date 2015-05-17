@@ -57,6 +57,8 @@ class PlayState : public cgf::GameState
     cgf::Sprite visibleArea;
     cgf::Sprite arrow;
     cgf::Sprite objective;
+    cgf::Sprite minimap;
+    cgf::Sprite pointMap;
 
     sf::RenderWindow* screen;
     cgf::InputManager* im;

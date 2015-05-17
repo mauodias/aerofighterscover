@@ -27,5 +27,6 @@
 *.out
 *.app
 
-# Specific Binaries
+# Specific Files
 PlayState
+PlayState.sh
