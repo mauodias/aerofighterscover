@@ -12,6 +12,7 @@
 #include "Game.h"
 #include "PlayState.h"
 #include "InputManager.h"
+#include <stdlib.h>
 
 PlayState PlayState::m_PlayState;
 
@@ -28,7 +29,7 @@ void PlayState::init()
     text.setCharacterSize(24); // in pixels
     text.setColor(sf::Color::Yellow);
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
-
+	createObjectives();
     map = new tmx::MapLoader("data/maps");       // all maps/tiles will be read from data/maps
     // map->AddSearchPath("data/maps/tilesets"); // e.g.: adding more search paths for tilesets
     map->Load("dungeon-tilesets2.tmx");
@@ -49,11 +50,13 @@ void PlayState::init()
     visibleArea.load("data/img/visibility.png");
     visibleArea.setOrigin(800,600);
     visibleArea.setPosition(64,124);
-    
-    arrow.load("data/img/arrow.png");
-    arrow.setOrigin(64,64);
-    arrow.setPosition(player.getPosition().x+24, player.getPosition().y+24);
-    arrow.setRotation(getArrowRotation(player.getPosition().x, player.getPosition().y, 158, 208));
+    arrows = new cgf::Sprite[10];
+    for(int i = 0 ; i<10;i++){
+		arrows[i].load("data/img/arrow.png");
+		arrows[i].setOrigin(64,64);
+		arrows[i].setPosition(player.getPosition().x+16, player.getPosition().y+16);
+		arrows[i].setRotation(getArrowRotation(player.getPosition().x+16, player.getPosition().y+16, objectives[i].getPosition().x, objectives[i].getPosition().y));
+	}
 
     objective.load("data/img/Char09.png");
     objective.setPosition(150,200);
@@ -165,9 +168,11 @@ void PlayState::handleEvents(cgf::Game* game)
     player.setXspeed(100*dirx);
     player.setYspeed(100*diry);
     sf::Vector2f playerPos = player.getPosition();
-    visibleArea.setPosition(playerPos.x+24, playerPos.y+24);
-    arrow.setPosition(playerPos.x+24, playerPos.y+24);
-    arrow.setRotation(getArrowRotation(playerPos.x, playerPos.y, 158, 208));
+    visibleArea.setPosition(playerPos.x+24, playerPos.y+24);    
+    for(int i = 0 ; i<10;i++){
+		arrows[i].setPosition(player.getPosition().x+16, player.getPosition().y+16);
+		arrows[i].setRotation(getArrowRotation(player.getPosition().x+16, player.getPosition().y+16, objectives[i].getPosition().x, objectives[i].getPosition().y));
+	}
     pointMap.setPosition(playerPos.x/(2048/192), playerPos.y/(1024/96));
 
 }
@@ -186,9 +191,11 @@ void PlayState::draw(cgf::Game* game)
     map->Draw(*screen);          // draw all layers
 //    map->Draw(*screen, 1);     // draw only the second layer
     screen->draw(player);
-    screen->draw(arrow);
-    screen->draw(objective);
-    screen->draw(visibleArea);
+    for(int i = 0;i<10;i++){
+		screen->draw(arrows[i]);
+		screen->draw(objectives[i]);
+	}
+    //screen->draw(visibleArea);
     sf::View originalView = screen->getDefaultView();
     sf::View currentView = screen->getView();
     screen->setView(originalView);
@@ -424,3 +431,15 @@ float PlayState::getArrowRotation(int px, int py, int ox, int oy)
     float angle = acos(base / distance) * 180 / PI * signy;
     return angle;
 }
+
+void PlayState::createObjectives(){
+	objectives =  new cgf::Sprite[10];
+	cgf::Sprite objective;
+	for(int i = 0; i<10; i++){
+		    objective.load("data/img/Char09.png");
+			objective.setPosition(rand()%2000,rand()%1000);
+			objectives[i]=objective;
+			
+	}
+	
+};

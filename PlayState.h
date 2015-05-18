@@ -45,11 +45,12 @@ class PlayState : public cgf::GameState
     private:
 
     static PlayState m_PlayState;
-
+    
     enum { RIGHT=0, LEFT, UP, DOWN };
     std::string walkStates[4];
     int currentDir;
-
+	cgf::Sprite* objectives;
+	cgf::Sprite* arrows;
     int x, y;
     int dirx, diry;
 
@@ -79,6 +80,8 @@ class PlayState : public cgf::GameState
 
     // Calculates the angle to rotate the arrow
     float getArrowRotation(int px, int py, int ox, int oy);
+    
+    void createObjectives();
 };
 
 #endif
