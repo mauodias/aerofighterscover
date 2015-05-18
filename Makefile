@@ -13,9 +13,9 @@
 # for C++ define  CC = g++
 CC = g++
 CFLAGS  = -g -std=c++11
-LIBRARIES = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lBox2D -lCGF-Linux -lz
-LIBRARYDIR = -Llib -Llib/Box2D-2.3.0/lib-Linux64 -L./lib/SFML-2.2/lib-Linux64 -Llib/CGF
-INCLUDEDIR = -Ilib/CGF/include -Ilib/CGF/include/tmxloader -Ilib/CGF/include/pugixml -Ilib/Box2D-2.3.0/include -Ilib/SFML-2.2/include
+LIBRARIES = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lCGF-Linux -lz
+LIBRARYDIR = -Llib -L./lib/SFML-2.2/lib-Linux64 -Llib/CGF
+INCLUDEDIR = -Ilib/CGF/include -Ilib/CGF/include/tmxloader -Ilib/CGF/include/pugixml -Ilib/SFML-2.2/include
 TARGET = PlayState
 LOCAL = $(shell pwd)
 
