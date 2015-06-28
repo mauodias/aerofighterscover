@@ -26,11 +26,14 @@ LOCAL = $(shell pwd)
 #
 default: PlayState
 
+debug: CFLAGS += -DDEBUG
+debug: default
+
 # To create the executable file count we need the object files
 # countwords.o, counter.o, and scanner.o:
 #
-PlayState:  PlayState.o main.o
-	$(CC) $(CFLAGS) $(LIBRARYDIR) -o bin/$(TARGET) obj/PlayState.o obj/main.o $(LIBRARIES)
+PlayState:  MenuState.o PlayState.o main.o
+	$(CC) $(CFLAGS) $(LIBRARYDIR) -o bin/$(TARGET) obj/MenuState.o obj/PlayState.o obj/main.o $(LIBRARIES)
 	echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.:$(LOCAL)/lib:$(LOCAL)/lib/Box2D-2.3.0/lib-Linux64:$(LOCAL)/lib/SFML-2.2/lib-Linux64 $(LOCAL)/bin/$(TARGET)" > bin/$(TARGET).sh
 	chmod +x bin/$(TARGET).sh
 
@@ -39,6 +42,9 @@ PlayState:  PlayState.o main.o
 #
 PlayState.o:
 	$(CC) $(CFLAGS) $(INCLUDEDIR) -c PlayState.cpp -o obj/PlayState.o
+
+MenuState.o:
+	$(CC) $(CFLAGS) $(INCLUDEDIR) -c MenuState.cpp -o obj/MenuState.o
 
 # To create the object file counter.o, we need the source files
 # counter.c and counter.h:

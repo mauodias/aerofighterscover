@@ -11,6 +11,7 @@
 #include <cmath>
 #include "Game.h"
 #include "PlayState.h"
+#include "MenuState.h"
 #include "InputManager.h"
 #include <stdlib.h>
 
@@ -77,7 +78,7 @@ void PlayState::init()
     im->addKeyInput("right", sf::Keyboard::Right);
     im->addKeyInput("up", sf::Keyboard::Up);
     im->addKeyInput("down", sf::Keyboard::Down);
-    im->addKeyInput("quit", sf::Keyboard::Escape);
+    im->addKeyInput("escape", sf::Keyboard::Escape);
     im->addKeyInput("stats", sf::Keyboard::S);
     im->addMouseInput("rightclick", sf::Mouse::Right);
 
@@ -139,8 +140,11 @@ void PlayState::handleEvents(cgf::Game* game)
         newDir = DOWN;
     }
 
-    if(im->testEvent("quit") || im->testEvent("rightclick"))
-        game->quit();
+    if(im->testEvent("escape") || im->testEvent("rightclick"))
+    {
+        game->changeState(MenuState::instance());
+        cout << "Going back to menu" << endl;
+    }
 
     if(im->testEvent("stats"))
         game->toggleStats();
