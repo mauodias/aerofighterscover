@@ -43,6 +43,7 @@ void MenuState::init()
     oldMenu = currentMenu;
     currentMode = gameMode::EASY;
     currentOption = startOptions::NEWGAME;
+    cout << "Init end" << endl;
 }
 
 void MenuState::cleanup()
@@ -69,33 +70,6 @@ void MenuState::handleEvents(cgf::Game* game)
     {
         if(event.type == sf::Event::Closed)
             game->quit();
-        /*
-        // check the type of the event...
-        switch (event.type)
-        {
-            // window closed
-        case sf::Event::Closed:
-            game->quit();
-            break;
-
-            // key pressed
-        case sf::Event::KeyPressed:
-            if(event.key.code == sf::Keyboard::Space || )
-                game->changeState(PlayState::instance());
-            if(event.key.code == sf::Keyboard::Escape)
-                game->quit();
-            //game->changeState(PlayMap::instance());
-            //game->changeState(PlayMapTop::instance());
-            //game->changeState(PlayMapAI::instance());
-            //game->changeState(PlayPhysics::instance());
-            //game->changeState(PlayMapPhysics::instance());
-            break;
-
-            // we don't process other types of events
-        default:
-            break;
-        }
-        */
     }
 
     if(im->testEvent("up")) {

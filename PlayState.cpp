@@ -15,6 +15,9 @@
 #include "InputManager.h"
 #include "Collision.h"
 #include <stdlib.h>
+#ifndef DEBUG
+#define DEBUG 0
+#endif
 
 PlayState PlayState::m_PlayState;
 
@@ -25,6 +28,8 @@ void PlayState::init()
 	quantidadeObjestos=4;
 	tempoDeJogo=20;
 	ended = 0;
+	quantidadeObjetosEncontrados=0;
+	tempoCorrido=0;
 	
     if (!font.loadFromFile("data/fonts/arial.ttf")) {
         cout << "Cannot load arial.ttf font!" << endl;
@@ -196,10 +201,11 @@ void PlayState::handleEvents(cgf::Game* game)
 
 void PlayState::update(cgf::Game* game)
 {
+	//cout<<ended<<endl;
 	if(ended){
 		sf::Time delayTime = sf::milliseconds(2000);
 		sf::sleep(delayTime);
-		game->changeState(MenuState::instance());
+        game->changeState(MenuState::instance());
 	}
 	if(tempoDeJogo<tempoCorrido){
 		text.setString("Perdeu playboy!");
@@ -503,7 +509,7 @@ void PlayState::createObjectives(){
     mapsize.x /= tilesize.x;
     mapsize.y /= tilesize.y;
 
-    if(1)
+    if(DEBUG)
     {
         cout << "mapsize.x=" << mapsize.x << " mapsize.y=" << mapsize.y << endl;
         cout << "tilesize.x=" << tilesize.x << " tilesize.y=" << tilesize.y << endl;
@@ -536,7 +542,7 @@ void PlayState::createObjectives(){
         int position = rand()%k;
         while(usedPositions[position])
             position = rand()%k;
-        if(1)
+        if(DEBUG)
             cout << position << endl;
         objective.setPosition(possiblePositions[position].x,possiblePositions[position].y);
         objectives[i]=objective;
