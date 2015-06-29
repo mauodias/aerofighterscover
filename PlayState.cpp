@@ -30,10 +30,10 @@ void PlayState::init()
     text.setCharacterSize(24); // in pixels
     text.setColor(sf::Color::Yellow);
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
-	createObjectives();
     map = new tmx::MapLoader("data/maps");       // all maps/tiles will be read from data/maps
     // map->AddSearchPath("data/maps/tilesets"); // e.g.: adding more search paths for tilesets
     map->Load("dungeon-tilesets2.tmx");
+    createObjectives();
 
     walkStates[0] = "walk-right";
     walkStates[1] = "walk-left";
@@ -52,7 +52,7 @@ void PlayState::init()
     visibleArea.setOrigin(800,600);
     visibleArea.setPosition(64,124);
     arrows = new cgf::Sprite[10];
-    for(int i = 0 ; i<10;i++){
+    for(int i = 0 ; i<4;i++){
 		arrows[i].load("data/img/arrow.png");
 		arrows[i].setOrigin(64,64);
 		arrows[i].setPosition(player.getPosition().x+16, player.getPosition().y+16);
@@ -173,7 +173,7 @@ void PlayState::handleEvents(cgf::Game* game)
     player.setYspeed(100*diry);
     sf::Vector2f playerPos = player.getPosition();
     visibleArea.setPosition(playerPos.x+24, playerPos.y+24);    
-    for(int i = 0 ; i<10;i++){
+    for(int i = 0 ; i<4;i++){
 		arrows[i].setPosition(player.getPosition().x+16, player.getPosition().y+16);
 		arrows[i].setRotation(getArrowRotation(player.getPosition().x+16, player.getPosition().y+16, objectives[i].getPosition().x, objectives[i].getPosition().y));
 	}
@@ -195,11 +195,11 @@ void PlayState::draw(cgf::Game* game)
     map->Draw(*screen);          // draw all layers
 //    map->Draw(*screen, 1);     // draw only the second layer
     screen->draw(player);
-    for(int i = 0;i<10;i++){
+    for(int i = 0;i<4;i++){
 		screen->draw(arrows[i]);
 		screen->draw(objectives[i]);
 	}
-    //screen->draw(visibleArea);
+    screen->draw(visibleArea);
     sf::View originalView = screen->getDefaultView();
     sf::View currentView = screen->getView();
     screen->setView(originalView);
@@ -437,6 +437,54 @@ float PlayState::getArrowRotation(int px, int py, int ox, int oy)
 }
 
 void PlayState::createObjectives(){
+    auto layers = map->GetLayers();
+    tmx::MapLayer& layer = layers[3];
+    sf::Vector2u mapsize = map->GetMapSize();
+    sf::Vector2u tilesize = map->GetMapTileSize();
+    mapsize.x /= tilesize.x;
+    mapsize.y /= tilesize.y;
+
+    if(DEBUG)
+    {
+        cout << "mapsize.x=" << mapsize.x << " mapsize.y=" << mapsize.y << endl;
+        cout << "tilesize.x=" << tilesize.x << " tilesize.y=" << tilesize.y << endl;
+    }
+
+    int x, y, k;
+    k = 0;
+    sf::Vector2u* possiblePositions = new sf::Vector2u[16];
+    int* usedPositions = new int[16];
+    for (y = 0; y < mapsize.y; ++y)
+    {
+        for (x = 0; x < mapsize.x; ++x)
+        {
+            if(layer.tiles[y*mapsize.x + x].gid)
+            {
+                sf::Vector2u pos;
+                pos.x = x*tilesize.x;
+                pos.y = y*tilesize.y;
+                possiblePositions[k] = pos;
+                usedPositions[k] = 0;
+                ++k;
+            }
+        }
+    }
+
+    objectives = new cgf::Sprite[4];
+    cgf::Sprite objective;
+    for(int i = 0; i<4; i++){
+        objective.load("data/img/Char09.png");
+        int position = rand()%k;
+        while(usedPositions[position])
+            position = rand()%k;
+        if(DEBUG)
+            cout << position << endl;
+        objective.setPosition(possiblePositions[position].x,possiblePositions[position].y);
+        objectives[i]=objective;
+        usedPositions[position] = 1;
+    }
+
+    /*
 	objectives =  new cgf::Sprite[10];
 	cgf::Sprite objective;
 	for(int i = 0; i<10; i++){
@@ -445,5 +493,5 @@ void PlayState::createObjectives(){
 			objectives[i]=objective;
 			
 	}
-	
+    */	
 };

@@ -356,7 +356,13 @@ void MenuState::draw(cgf::Game *game)
 
         }
     }
+
+    sf::View originalView = game->getScreen()->getDefaultView();
+    sf::View currentView = game->getScreen()->getView();
+    game->getScreen()->setView(originalView);
     game->getScreen()->draw(menuSprite);
     game->getScreen()->draw(menuText);
     game->getScreen()->draw(cursor);
+    game->getScreen()->setView(currentView);
+
 }
