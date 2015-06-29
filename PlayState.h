@@ -15,6 +15,7 @@
 #include "InputManager.h"
 #include <tmx/MapLoader.h>
 #include <string>
+#include <time.h> 
 
 #define PI 3.14159265
 
@@ -49,12 +50,16 @@ class PlayState : public cgf::GameState
     enum { RIGHT=0, LEFT, UP, DOWN };
     std::string walkStates[4];
     int currentDir;
+    bool ended;
     bool* objectiveFound;
 	cgf::Sprite* objectives;
 	cgf::Sprite* arrows;
     int x, y;
     int dirx, diry;
-
+	int quantidadeObjestos;
+	int quantidadeObjetosEncontrados;
+	int tempoDeJogo;
+	double tempoCorrido;
     cgf::Sprite player;
     cgf::Sprite visibleArea;
     cgf::Sprite arrow;
@@ -69,7 +74,8 @@ class PlayState : public cgf::GameState
 
     sf::Font font;
     sf::Text text;
-
+    sf::Text tempo;
+	time_t inicio;
     // Centers the camera on the player position
     void centerMapOnPlayer();
 

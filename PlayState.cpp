@@ -22,15 +22,24 @@ using namespace std;
 
 void PlayState::init()
 {
+	quantidadeObjestos=4;
+	tempoDeJogo=20;
+	ended = 0;
+	
     if (!font.loadFromFile("data/fonts/arial.ttf")) {
         cout << "Cannot load arial.ttf font!" << endl;
         exit(1);
     }
     text.setFont(font);
-    text.setString(L"Testing text output in SFML");
     text.setCharacterSize(24); // in pixels
     text.setColor(sf::Color::Yellow);
-    text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+    text.setStyle(sf::Text::Bold);
+    
+    tempo.setPosition(0.0,32.0);
+    tempo.setFont(font);
+    tempo.setCharacterSize(24);
+    tempo.setColor(sf::Color::Yellow);
+    tempo.setStyle(sf::Text::Bold);
     map = new tmx::MapLoader("data/maps");       // all maps/tiles will be read from data/maps
     // map->AddSearchPath("data/maps/tilesets"); // e.g.: adding more search paths for tilesets
     map->Load("dungeon-tilesets2.tmx");
@@ -52,9 +61,9 @@ void PlayState::init()
     visibleArea.load("data/img/visibility.png");
     visibleArea.setOrigin(800,600);
     visibleArea.setPosition(64,124);
-    arrows = new cgf::Sprite[10];
-    objectiveFound = new bool[10];
-    for(int i = 0 ; i<4;i++){
+    arrows = new cgf::Sprite[quantidadeObjestos];
+    objectiveFound = new bool[quantidadeObjestos];
+    for(int i = 0 ; i<quantidadeObjestos;i++){
 		objectiveFound[i]=0;
 		arrows[i].load("data/img/arrow.png");
 		arrows[i].setOrigin(64,64);
@@ -90,6 +99,7 @@ void PlayState::init()
     im->addKeyInput("zoomout", sf::Keyboard::X);
 
     cout << "PlayState: Init" << endl;
+    time(&inicio);
 }
 
 void PlayState::cleanup()
@@ -176,7 +186,7 @@ void PlayState::handleEvents(cgf::Game* game)
     player.setYspeed(100*diry);
     sf::Vector2f playerPos = player.getPosition();
     visibleArea.setPosition(playerPos.x+24, playerPos.y+24);    
-    for(int i = 0 ; i<4;i++){
+    for(int i = 0 ; i<quantidadeObjestos;i++){
 		arrows[i].setPosition(player.getPosition().x+16, player.getPosition().y+16);
 		arrows[i].setRotation(getArrowRotation(player.getPosition().x+16, player.getPosition().y+16, objectives[i].getPosition().x, objectives[i].getPosition().y));
 	}
@@ -186,9 +196,23 @@ void PlayState::handleEvents(cgf::Game* game)
 
 void PlayState::update(cgf::Game* game)
 {
+	if(ended){
+		sf::Time delayTime = sf::milliseconds(2000);
+		sf::sleep(delayTime);
+		game->changeState(MenuState::instance());
+	}
+	if(tempoDeJogo<tempoCorrido){
+		text.setString("Perdeu playboy!");
+		tempo.setString("");
+		ended=1;
+	}
+	if(quantidadeObjetosEncontrados==quantidadeObjestos){
+		text.setString("You'r the one who knocks!");
+		tempo.setString("");
+		ended=1;
+	}
     screen = game->getScreen();
     checkCollision(2, game, &player);
-//    player.update(game->getUpdateInterval());
     centerMapOnPlayer();
 }
 bool PlayState::objFound(int objIndex){
@@ -209,14 +233,29 @@ void PlayState::draw(cgf::Game* game)
     map->Draw(*screen);          // draw all layers
 //    map->Draw(*screen, 1);     // draw only the second layer
     screen->draw(player);
-    for(int i = 0;i<4;i++){
+    quantidadeObjetosEncontrados = 0;
+    for(int i = 0;i<quantidadeObjestos;i++){
 		if(objectiveFound[i]|| player.bboxCollision(objectives[i])){
 			objectiveFound[i]=true;
+			quantidadeObjetosEncontrados++;
 		}
 		else{
 			screen->draw(arrows[i]);
 			screen->draw(objectives[i]);
 		}
+	}
+	if(!ended){
+		char buff[100];
+		std::string buffAsStdStr;
+		sprintf(buff, "Objetos faltando %d", quantidadeObjestos-quantidadeObjetosEncontrados);
+		buffAsStdStr = buff;
+		text.setString(buffAsStdStr);
+		time_t timer;
+		time(&timer);
+		tempoCorrido = difftime(timer,inicio);
+		sprintf(buff, "Tempo restante %.f", tempoDeJogo-tempoCorrido);
+		buffAsStdStr = buff;
+		tempo.setString(buffAsStdStr);	
 	}
     screen->draw(visibleArea);
     sf::View originalView = screen->getDefaultView();
@@ -225,6 +264,7 @@ void PlayState::draw(cgf::Game* game)
     screen->draw(minimap);
     screen->draw(pointMap); 
     screen->draw(text);
+    screen->draw(tempo);
     screen->setView(currentView);
 }
 
@@ -489,9 +529,9 @@ void PlayState::createObjectives(){
         }
     }
 
-    objectives = new cgf::Sprite[4];
+    objectives = new cgf::Sprite[quantidadeObjestos];
     cgf::Sprite objective;
-    for(int i = 0; i<4; i++){
+    for(int i = 0; i<quantidadeObjestos; i++){
         objective.load("data/img/Char09.png");
         int position = rand()%k;
         while(usedPositions[position])
