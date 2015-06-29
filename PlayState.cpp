@@ -13,6 +13,7 @@
 #include "PlayState.h"
 #include "MenuState.h"
 #include "InputManager.h"
+#include "Collision.h"
 #include <stdlib.h>
 
 PlayState PlayState::m_PlayState;
@@ -52,7 +53,9 @@ void PlayState::init()
     visibleArea.setOrigin(800,600);
     visibleArea.setPosition(64,124);
     arrows = new cgf::Sprite[10];
+    objectiveFound = new bool[10];
     for(int i = 0 ; i<4;i++){
+		objectiveFound[i]=0;
 		arrows[i].load("data/img/arrow.png");
 		arrows[i].setOrigin(64,64);
 		arrows[i].setPosition(player.getPosition().x+16, player.getPosition().y+16);
@@ -188,7 +191,18 @@ void PlayState::update(cgf::Game* game)
 //    player.update(game->getUpdateInterval());
     centerMapOnPlayer();
 }
-
+bool PlayState::objFound(int objIndex){
+	sf::FloatRect obj = objectives[objIndex].getLocalBounds();
+	sf::FloatRect personagem = player.getLocalBounds();
+	bool notInSameLine = obj.top+obj.height<personagem.top || obj.top>personagem.height+personagem.top;
+	bool notInSameCollum = obj.left+obj.width<personagem.left || obj.left>personagem.width+personagem.left;
+	if(!notInSameLine && !notInSameCollum)
+	{
+		printf("Personagem %d %d %d %d \n",personagem.width, personagem.left,personagem.height,personagem.top);
+		printf("Objeto %d %d %d %d \n",obj.width, obj.left,obj.height,obj.top);
+	}
+	return !notInSameLine && !notInSameCollum;
+}
 void PlayState::draw(cgf::Game* game)
 {
     screen = game->getScreen();
@@ -196,8 +210,13 @@ void PlayState::draw(cgf::Game* game)
 //    map->Draw(*screen, 1);     // draw only the second layer
     screen->draw(player);
     for(int i = 0;i<4;i++){
-		screen->draw(arrows[i]);
-		screen->draw(objectives[i]);
+		if(objectiveFound[i]|| player.bboxCollision(objectives[i])){
+			objectiveFound[i]=true;
+		}
+		else{
+			screen->draw(arrows[i]);
+			screen->draw(objectives[i]);
+		}
 	}
     screen->draw(visibleArea);
     sf::View originalView = screen->getDefaultView();
@@ -444,7 +463,7 @@ void PlayState::createObjectives(){
     mapsize.x /= tilesize.x;
     mapsize.y /= tilesize.y;
 
-    if(DEBUG)
+    if(1)
     {
         cout << "mapsize.x=" << mapsize.x << " mapsize.y=" << mapsize.y << endl;
         cout << "tilesize.x=" << tilesize.x << " tilesize.y=" << tilesize.y << endl;
@@ -477,7 +496,7 @@ void PlayState::createObjectives(){
         int position = rand()%k;
         while(usedPositions[position])
             position = rand()%k;
-        if(DEBUG)
+        if(1)
             cout << position << endl;
         objective.setPosition(possiblePositions[position].x,possiblePositions[position].y);
         objectives[i]=objective;

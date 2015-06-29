@@ -27,7 +27,7 @@ class PlayState : public cgf::GameState
 
     void pause();
     void resume();
-
+	bool objFound(int objIndex);
     void handleEvents(cgf::Game* game);
     void update(cgf::Game* game);
     void draw(cgf::Game* game);
@@ -49,6 +49,7 @@ class PlayState : public cgf::GameState
     enum { RIGHT=0, LEFT, UP, DOWN };
     std::string walkStates[4];
     int currentDir;
+    bool* objectiveFound;
 	cgf::Sprite* objectives;
 	cgf::Sprite* arrows;
     int x, y;
